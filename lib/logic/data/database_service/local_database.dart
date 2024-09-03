@@ -92,63 +92,6 @@ class LocalDatabase {
     return list;
   }
 
-  static Future<List<EventModel>> getTaskByTitle({String name = ''}) async {
-    var database = await getInstance.getDb();
-
-    if (name.isNotEmpty) {
-      var listOfTodos = await database.query(
-        tableName,
-        where: 'title LIKE ?',
-        whereArgs: ['%$name%'],
-      );
-      var list = listOfTodos.map((e) => EventModel.fromJson(e)).toList();
-      return list;
-    } else {
-      var listOfTodos = await database.query(tableName, columns: [
-        EventMake.id,
-        EventMake.name,
-        EventMake.description,
-        EventMake.color,
-        EventMake.day,
-        EventMake.isFinished,
-        EventMake.location
-      ]);
-
-      var list = listOfTodos.map((e) => EventModel.fromJson(e)).toList();
-      return list;
-    }
-  }
-
-  static Future<List<EventModel>> getTodosIsCompleted(int isFinished,
-      {String name = ''}) async {
-    var database = await getInstance.getDb();
-
-    if (name.isNotEmpty) {
-      var listOfTodos = await database.query(
-        tableName,
-        where: 'title LIKE ? AND ${EventMake.isFinished} = ?',
-        whereArgs: ['%$name%', '$isFinished'],
-      );
-      var list = listOfTodos.map((e) => EventModel.fromJson(e)).toList();
-      return list;
-    } else {
-      var listOfTodos = await database.query(tableName,
-          columns: [
-            EventMake.id,
-            EventMake.name,
-            EventMake.description,
-            EventMake.color,
-            EventMake.day,
-            EventMake.isFinished,
-            EventMake.location,
-          ],
-          where: '${EventMake.isFinished} = ?',
-          whereArgs: ['$isFinished']);
-
-      var list = listOfTodos.map((e) => EventModel.fromJson(e)).toList();
-      return list;
-    }
-  }
 
   static Future<int> deleteTaskById(int id) async {
     var database = await getInstance.getDb();
